@@ -5,49 +5,60 @@ public class StereoKeten {
     private Equalizer equalizer = new Equalizer();
     private Radio radio = new Radio();
     private CdSpeler cdSpeler = new CdSpeler();
-    private boolean laatstRadio = true;
+    //private boolean laatstRadio = true;
+    private Geluidsbron huidigeGeluidsbron = radio;
+    private boolean gestart;
     
     public void start(){
         versterker.start();
         equalizer.start();
-        if (laatstRadio){
-            radio.start();
-        }
-        else {
-            cdSpeler.start();
-        }
+//        if (huidigeGeluidsbron.equals(radio)){
+//            radio.start();
+//        }
+//        else {
+//            cdSpeler.start();
+//            huidigeGeluidsbron = cdSpeler;
+//        }
+        huidigeGeluidsbron.start();
+        gestart = true;
     }
     
     public void stop(){
         versterker.stop();
         equalizer.stop();
-        if (laatstRadio){
-            radio.stop();
-        }
-        else {
-            cdSpeler.stop();
-        }
+//        if (huidigeGeluidsbron.equals(radio)){
+//            radio.stop();
+//        }
+//        else {
+//            cdSpeler.stop();
+//        }
+        huidigeGeluidsbron.stop();
+        gestart = false;
     }
     
     public void startRadio(){
-        if (laatstRadio){
-            System.out.println("radio is al gestart");
-        }
-        else {
-            cdSpeler.stop();
-            radio.start();
-            laatstRadio = true;
+        if(gestart){
+            if (huidigeGeluidsbron.equals(radio)){
+                System.out.println("radio is al gestart");
+            }
+            else {
+                cdSpeler.stop();
+                radio.start();
+                huidigeGeluidsbron = radio;
+            }
         }
     }
     
     public void startCdSpeler(){
-        if (laatstRadio){
-            radio.stop();
-            cdSpeler.start();
-            laatstRadio = false;
-        }
-        else {
-            System.out.println("cd speler is al gestart");
+        if(gestart){
+            if (huidigeGeluidsbron.equals(radio)){
+                radio.stop();
+                cdSpeler.start();
+                huidigeGeluidsbron = cdSpeler;
+            }
+            else {
+                System.out.println("cd speler is al gestart");
+            }
         }
     }
 }
